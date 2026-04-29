@@ -1,0 +1,106 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTG OFFICIAL NAME GENERATOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --neon-green: #00ff41; }
+        body { background-color: #000; color: white; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        #hacker-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.25; }
+        .main-card { background: rgba(5, 5, 5, 0.95); border: 1px solid rgba(0, 255, 65, 0.4); box-shadow: 0 0 50px rgba(0, 255, 65, 0.15); backdrop-filter: blur(15px); border-radius: 30px; width: 100%; max-width: 480px; padding: 2.5rem 1.5rem; position: relative; z-index: 10; }
+        .neon-glow { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
+        .swipe-container { display: flex; gap: 15px; overflow-x: auto; scroll-behavior: smooth; padding: 15px 10px; -webkit-overflow-scrolling: touch; cursor: grab; }
+        .swipe-container::-webkit-scrollbar { display: none; }
+        .btn-icon { flex: 0 0 auto; width: 55px; height: 55px; background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: 0.3s; }
+        .btn-icon.active { border-color: var(--neon-green); background: rgba(0, 255, 65, 0.1); color: var(--neon-green); box-shadow: 0 0 15px rgba(0, 255, 65, 0.3); }
+        .social-bar a { display: inline-block; font-size: 26px; color: #fff; animation: jump 2.5s ease-in-out infinite; }
+        .social-bar a:nth-child(1) { animation-delay: 0.1s; }
+        .social-bar a:nth-child(2) { animation-delay: 0.3s; }
+        .social-bar a:nth-child(3) { animation-delay: 0.5s; }
+        .social-bar a:nth-child(4) { animation-delay: 0.7s; }
+        .social-bar a:nth-child(5) { animation-delay: 0.9s; }
+        @keyframes jump { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-18px); color: var(--neon-green); filter: drop-shadow(0 0 15px var(--neon-green)); } 60% { transform: translateY(-8px); } }
+        .input-rtg { background: #050505; border: 1px solid #111; border-radius: 15px; letter-spacing: 5px; transition: 0.3s; }
+        .input-rtg:focus { border-color: var(--neon-green); box-shadow: 0 0 20px rgba(0, 255, 65, 0.1); outline: none; }
+        .generate-btn { background: var(--neon-green); color: black; font-weight: 900; border-radius: 15px; transition: 0.4s; }
+        .generate-btn:hover:not(:disabled) { box-shadow: 0 0 30px var(--neon-green); transform: scale(1.02); }
+        .preview-area { background: radial-gradient(circle at center, #0a1a0a 0%, #000 100%); border: 1px solid #111; border-radius: 20px; }
+    </style>
+</head>
+<body>
+    <canvas id="hacker-canvas"></canvas>
+    <div class="main-card">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold font-['Orbitron'] tracking-tighter"><span class="neon-glow">RTG</span> OFFICIAL</h1>
+            <p class="text-[9px] uppercase tracking-[0.5em] opacity-40 mt-1">Name Generator Pro</p>
+        </div>
+        <div class="preview-area p-6 text-center mb-6">
+            <span class="text-[8px] uppercase tracking-widest opacity-30 mb-2 block">In-Game Result</span>
+            <div id="display" class="text-2xl font-bold tracking-tighter text-white">ᴿᵀᴳ〆...</div>
+            <div class="w-full h-1 bg-zinc-900 mt-5 rounded-full overflow-hidden">
+                <div id="bar" class="h-full bg-green-500 transition-all duration-500" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="mb-6 px-1">
+            <div class="flex justify-between text-[10px] mb-2 opacity-50 font-bold"><span>NAME (2-6 CHR)</span><span id="counter">0/6</span></div>
+            <input type="text" id="nameIn" maxlength="6" placeholder="TYPE HERE" class="input-rtg w-full p-4 text-center text-xl font-bold uppercase text-white">
+        </div>
+        <div id="optionsUI" class="hidden">
+            <div class="mb-4">
+                <div class="swipe-container" id="symScroll">
+                    <button onclick="pick(' 모')" class="btn-icon">모</button>
+                    <button onclick="pick(' 亗')" class="btn-icon">亗</button>
+                    <button onclick="pick(' ☯︎')" class="btn-icon">☯︎</button>
+                    <button onclick="pick(' ❀')" class="btn-icon">❀</button>
+                    <button onclick="pick(' ✿')" class="btn-icon">✿</button>
+                    <button onclick="pick(' 彡')" class="btn-icon">彡</button>
+                    <button onclick="pick(' ⚡')" class="btn-icon">⚡</button>
+                    <button onclick="pick(' ♠')" class="btn-icon">♠</button>
+                    <button onclick="pick(' ☠︎')" class="btn-icon">☠︎</button>
+                    <button onclick="pick(' ⚠')" class="btn-icon">⚠</button>
+                    <button onclick="pick(' ☣︎')" class="btn-icon">☣︎</button>
+                    <button onclick="pick(' ♛')" class="btn-icon">♛</button>
+                </div>
+            </div>
+            <div id="tagBox" class="mb-6">
+                <div class="swipe-container" id="tagScroll">
+                    <button onclick="pick(' ᴸᴵⱽᴱ')" class="btn-icon text-xs font-bold">LIVE</button>
+                    <button onclick="pick(' ᴮᴼˢˢ')" class="btn-icon text-xs font-bold">BOSS</button>
+                    <button onclick="pick(' ᴾᴿᴼ')" class="btn-icon text-xs font-bold">PRO</button>
+                    <button onclick="pick(' ᴴ⁴ˣ')" class="btn-icon text-xs font-bold">H4X</button>
+                </div>
+            </div>
+        </div>
+        <button id="copyBtn" disabled onclick="copyName()" class="generate-btn w-full py-4 text-sm mb-8 uppercase">Copy Nickname</button>
+        <div class="social-bar flex justify-center gap-6 mb-4">
+            <a href="https://www.youtube.com/@RTGRAHATLIVE" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+        <div class="text-center text-[9px] opacity-30 tracking-[0.4em] mt-8 uppercase">Powered by RahaT Gamaing</div>
+    </div>
+    <script>
+        const canvas = document.getElementById('hacker-canvas'), ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const bin = "01RTG#@$%&*"; const font = 14; const columns = canvas.width / font; const drops = Array(Math.floor(columns)).fill(1);
+        function matrix() { ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = "#00ff41"; ctx.font = font + "px monospace"; for (let i = 0; i < drops.length; i++) { const text = bin.charAt(Math.floor(Math.random() * bin.length)); ctx.fillText(text, i * font, drops[i] * font); if (drops[i] * font > canvas.height && Math.random() > 0.975) drops[i] = 0; drops[i]++; } }
+        setInterval(matrix, 50);
+        const input = document.getElementById('nameIn'), display = document.getElementById('display'), bar = document.getElementById('bar'), copyBtn = document.getElementById('copyBtn'), ui = document.getElementById('optionsUI'), tagBox = document.getElementById('tagBox');
+        let prefix = "ᴿᵀᴳ〆", main = "", extra = "";
+        input.addEventListener('input', (e) => {
+            main = e.target.value.toUpperCase().replace(/\s/g, ''); document.getElementById('counter').innerText = `${main.length}/6`;
+            if (main.length >= 2) { ui.classList.remove('hidden'); copyBtn.disabled = false; if (main.length > 4) { tagBox.classList.add('hidden'); if (extra.length > 2) extra = ""; } else { tagBox.classList.remove('hidden'); } } else { ui.classList.add('hidden'); copyBtn.disabled = true; extra = ""; }
+            update();
+        });
+        function pick(val) { extra = (extra === val) ? "" : val; document.querySelectorAll('.btn-icon').forEach(btn => { const map = {'LIVE': ' ᴸᴵⱽᴱ', 'BOSS': ' ᴮᴼˢˢ', 'PRO': ' ᴾᴿᴼ', 'H4X': ' ᴴ⁴ˣ'}; const btnVal = map[btn.innerText] || (' ' + btn.innerText); btn.classList.toggle('active', btnVal === extra); }); update(); }
+        function update() { const res = main.length >= 2 ? (prefix + main + extra) : (prefix + "..."); display.innerText = res; bar.style.width = Math.min((res.length / 12) * 100, 100) + "%"; display.classList.toggle('neon-glow', res.length >= 12); }
+        function copyName() { const el = document.createElement('textarea'); el.value = display.innerText; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); copyBtn.innerText = "COPIED!"; setTimeout(() => { copyBtn.innerText = "COPY NICKNAME"; }, 2000); }
+    </script>
+</body>
+</html>
